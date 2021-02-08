@@ -1,0 +1,4 @@
+LIBRARY "WoaGain"
+
+EXPORTS
+  AkCreatePlugin
