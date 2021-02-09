@@ -41,6 +41,8 @@ public:
     WoaGainPlugin();
     ~WoaGainPlugin();
 
+    //=== Core Methods ===
+
     /// This will be called to delete the plug-in.
     /// The object is responsible for deleting itself when this method is called.
     void Destroy() override;
@@ -54,6 +56,44 @@ public:
     // Larger data should be put in the Data Block.
     bool GetBankParameters(const GUID& in_guidPlatform, AK::Wwise::IWriteData* in_pDataWriter) const override;
 
+    //=== Frontend Methods ===
+
+    /// Retrieve the handle holding resources for the module containing the plug-in instance
+    HINSTANCE GetResourceHandle() const override;
+
+    /// Retrieve the dialog ID and its table mapping control ID to properties
+    bool GetDialog(
+        eDialog in_eDialog,				///< The dialog type
+        UINT & out_uiDialogID,			///< The returned resource ID of the dialog
+        AK::Wwise::PopulateTableItem *& out_pTable	///< The returned table of property-control bindings (can be NULL)
+    ) const override;
+
+    /// Window message handler
+    bool WindowProc(
+        eDialog in_eDialog,		///< The dialog type
+        HWND in_hWnd,			///< The window handle of the dialog
+        UINT in_message,		///< The incoming message. This is a standard Windows message ID (ex. WM_PAINT).
+        WPARAM in_wParam,		///< The WPARAM of the message (see MSDN)
+        LPARAM in_lParam,		///< The LPARAM of the message (see MSDN)
+        LRESULT & out_lResult 	///< The returned value if the message has been processed (it is only considered if the method also returns True)
+    ) override;
+
+    /// Function called when user clicked the help [?] button
+    bool Help(
+        HWND in_hWnd,					///< The handle of the dialog
+        eDialog in_eDialog,				///< The dialog type
+        LPCWSTR in_szLanguageCode		///< The language code in ISO639-1
+    ) const override;
+
+    /// Function called when monitor data is posted for our plug-in type
+    void NotifyMonitorData(
+        const AK::Wwise::IAudioPlugin::MonitorData * in_pData,
+        unsigned int in_uDataSize,
+        bool in_bNeedsByteSwap,
+        bool in_bRealtime
+    ) override;
+
 private:
     AK::Wwise::IPluginPropertySet* m_pPSet;
+    HWND m_hwnd;
 };

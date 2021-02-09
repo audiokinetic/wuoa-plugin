@@ -95,6 +95,8 @@ Plugin.authoring.files =
     "WoaGain.h",
     "WoaGain.def",
     "WoaGain.xml",
+    "resource.h", -- Resource declarations
+    "WoaGain.rc"  -- Resource definitions
 }
 Plugin.authoring.excludes =
 {
